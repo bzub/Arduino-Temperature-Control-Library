@@ -14,6 +14,9 @@ extern "C" {
 }
 #endif
 
+// bzub
+#define max(a,b)                       ((a)>(b)?(a):(b))
+
 // OneWire commands
 #define STARTCONVO      0x44  // Tells device to take a temperature reading and put it on the scratchpad
 #define COPYSCRATCH     0x48  // Copy EEPROM
@@ -634,7 +637,7 @@ void DallasTemperature::setHighAlarmTemp(const uint8_t* deviceAddress, char cels
 
     // make sure the alarm temperature is within the device's range
     if (celsius > 125) celsius = 125;
-    else if (celsius < -55) celsius = -55;
+    else if ((float)celsius < -55) celsius = -55;
 
     ScratchPad scratchPad;
     if (isConnected(deviceAddress, scratchPad)){
@@ -654,7 +657,7 @@ void DallasTemperature::setLowAlarmTemp(const uint8_t* deviceAddress, char celsi
 
     // make sure the alarm temperature is within the device's range
     if (celsius > 125) celsius = 125;
-    else if (celsius < -55) celsius = -55;
+    else if ((float)celsius < -55) celsius = -55;
 
     ScratchPad scratchPad;
     if (isConnected(deviceAddress, scratchPad)){
@@ -819,7 +822,9 @@ void DallasTemperature::setAlarmHandler(AlarmHandler *handler){
 }
 
 // The default alarm handler
-void DallasTemperature::defaultAlarmHandler(const uint8_t* deviceAddress){}
+void DallasTemperature::defaultAlarmHandler(const uint8_t* deviceAddress){
+  (void) deviceAddress;
+}
 
 #endif
 
